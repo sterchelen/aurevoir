@@ -52,6 +52,15 @@ putJson(void *ptr, size_t size, size_t nmemb, void *_putData) {
     return realsize;
 }
 
+static size_t
+nullWriteCallback(char *ptr, size_t size, size_t nmemb, void *userdata){
+    //we want this function to act as a no-op
+    //this fct used as a callback must return the number of bytes
+    //actually taken care of
+    //(https://everything.curl.dev/libcurl/callbacks/write)
+    return size * nmemb;
+}
+
 
 //TODO: rework returned value
 static int queryCallback(int sock, const struct sockaddr* from, size_t addrlen,
@@ -110,6 +119,7 @@ static int queryCallback(int sock, const struct sockaddr* from, size_t addrlen,
         curl_easy_setopt(curl, CURLOPT_READDATA, json);
         curl_easy_setopt(curl, CURLOPT_INFILESIZE, strlen(json));
         curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, nullWriteCallback);
 #ifdef DEBUG
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 #endif
