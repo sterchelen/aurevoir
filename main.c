@@ -13,8 +13,6 @@ const char* serviceName = "_elg._tcp.local.";
 static char addrbuffer[64];
 static char entrybuffer[256];
 static char namebuffer[256];
-static char sendbuffer[1024];
-static mdns_record_txt_t txtbuffer[128];
 
 struct elgatoLight {
     bool isOn;
