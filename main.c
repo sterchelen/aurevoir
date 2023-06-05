@@ -133,10 +133,10 @@ static int queryCallback(int sock, const struct sockaddr* from, size_t addrlen,
 
         free(url);
         free(json);
-}
+    }
 
-curl_global_cleanup();
-  return 1;
+    curl_global_cleanup();
+    return 1;
 }
 
 int main(int argc, char *argv[]) {
@@ -188,4 +188,6 @@ int main(int argc, char *argv[]) {
     mdns_socket_close(socket);
     free(buffer);
     free(settings);
+
+    return 0;
 }
