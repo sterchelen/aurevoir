@@ -77,8 +77,10 @@ static int queryCallback(int sock, const struct sockaddr* from, size_t addrlen,
     mdns_record_parse_a(data, size, record_offset, record_length, &addr);
     mdns_string_t addrstr =
         ipv4ToString(namebuffer, sizeof(namebuffer), &addr, sizeof(addr));
+#ifdef DEBUG
     printf("%.*s : %s %.*s A %.*s\n", MDNS_STRING_FORMAT(fromaddrstr), entrytype,
            MDNS_STRING_FORMAT(entrystr), MDNS_STRING_FORMAT(addrstr));
+#endif
 
     char *url;
     int elgPort = 9123;
@@ -110,7 +112,9 @@ static int queryCallback(int sock, const struct sockaddr* from, size_t addrlen,
         curl_easy_setopt(curl, CURLOPT_READDATA, json);
         curl_easy_setopt(curl, CURLOPT_INFILESIZE, strlen(json));
         curl_easy_setopt(curl, CURLOPT_URL, url);
+#ifdef DEBUG
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+#endif
 
         res = curl_easy_perform(curl);
         if(res != CURLE_OK)
@@ -139,7 +143,9 @@ int main(int argc, char *argv[]) {
     if (query_id < 0)
         printf("failed to send query");
 
+#ifdef DEBUG
     printf("reading mdns answer\n");
+#endif
 
     struct timeval timeout = {.tv_sec = 10, .tv_usec = 0};
 
@@ -148,7 +154,9 @@ int main(int argc, char *argv[]) {
     FD_ZERO(&read_fs);
     if (socket >= ndfs)
         ndfs = socket + 1;
+#ifdef DEBUG
     printf("ndfs:%d\n", ndfs);
+#endif
     FD_SET(socket, &read_fs);
 
     int res = select(ndfs, &read_fs, 0, 0, &timeout);
