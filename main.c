@@ -8,7 +8,7 @@
 #include <curl/curl.h>
 #include "mdns.h"
 
-const char* serviceName = "_elg._tcp.local.";
+#define SERVICE_NAME "_elg._tcp.local"
 
 static char addrbuffer[64];
 static char entrybuffer[256];
@@ -136,8 +136,8 @@ int main(int argc, char *argv[]) {
     size_t capacity = 2048;
     void *buffer = malloc(capacity);
 
-    int query_id = mdns_query_send(socket, record_type, serviceName,
-            strlen(serviceName), buffer, capacity, 0);
+    int query_id = mdns_query_send(socket, record_type, SERVICE_NAME,
+            strlen (SERVICE_NAME), buffer, capacity, 0);
     if (query_id < 0)
         printf("failed to send query");
 
